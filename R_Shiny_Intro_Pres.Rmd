@@ -1,0 +1,121 @@
+---
+title: "R Shiny Intro Pres"
+author: "John Muschelli"
+date: '`r Sys.Date()`'
+output: 
+  ioslides_presentation:
+    logo: logo.png
+    incremental: true
+runtime: shiny
+---
+
+## Shiny in R
+
+- What is Shiny in R?
+
+> - A web application framework for R
+> - Turn your analyses into interactive web applications
+
+- No HTML, CSS, or JavaScript knowledge required*
+- (*Sort of)
+- Go to the [Gallery](http://shiny.rstudio.com/gallery/)
+
+
+## Default Interactive Plot
+
+```{r, echo=FALSE}
+inputPanel(
+  selectInput("n_breaks", label = "Number of bins:",
+              choices = c(10, 20, 35, 50), selected = 20),
+  
+  sliderInput("bw_adjust", label = "Bandwidth adjustment:",
+              min = 0.2, max = 2, value = 1, step = 0.2)
+)
+
+renderPlot({
+  hist(faithful$eruptions, probability = TRUE, breaks = as.numeric(input$n_breaks),
+       xlab = "Duration (minutes)", main = "Geyser eruption duration")
+  
+  dens <- density(faithful$eruptions, adjust = input$bw_adjust)
+  lines(dens, col = "blue")
+})
+```
+
+
+## Why Shiny?
+
+- The user can INTERACT with the data and R
+- Usually, only one of them is possible
+- No Code - complete web app
+- Can use all the things R has to offer
+
+
+## Default Interactive Plot Input (UI) Code
+
+```{r, echo=TRUE, eval = FALSE}
+inputPanel(
+  selectInput("n_breaks", label = "Number of bins:",
+              choices = c(10, 20, 35, 50), selected = 20),
+  
+  sliderInput("bw_adjust", label = "Bandwidth adjustment:",
+              min = 0.2, max = 2, value = 1, step = 0.2)
+)
+```
+
+
+## Default Interactive Plot Output (Server) Code
+
+```{r, echo=TRUE, eval = FALSE}
+renderPlot({
+  hist(faithful$eruptions, probability = TRUE, breaks = as.numeric(input$n_breaks),
+       xlab = "Duration (minutes)", main = "Geyser eruption duration")
+  
+  dens <- density(faithful$eruptions, adjust = input$bw_adjust)
+  lines(dens, col = "blue")
+})
+```
+
+
+
+## Just quick table (ugly)
+
+```{r}
+summary(cars)
+```
+
+## Just quick table (less ugly, but still ugly)
+
+```{r}
+renderTable({
+  summary(cars)
+})
+```
+
+## Just quick table (less ugly, but still ugly)
+
+Takes same arguments as `print.xtable`
+```{r}
+renderTable({
+  summary(cars)
+}, include.rownames = FALSE)
+```
+
+
+
+## DataTables in Shiny
+
+```{r, echo = FALSE}
+renderDataTable({
+  cars
+  })
+```
+
+## DataTables in Shiny
+
+```{r, echo = TRUE, eval = FALSE}
+renderDataTable({
+  cars
+  })
+```
+
+
