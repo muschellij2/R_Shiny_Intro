@@ -44,10 +44,47 @@ renderPlot({
 
 ## Why Shiny?
 
+- Let's just step back and talk about what this slide deck is 
 - The user can INTERACT with the data and R
 - Usually, only one of them is possible
 - No Code - complete web app
-- Can use all the things R has to offer
+> - Can use all the things R has to offer
+> - Look at all these [Widgets!](http://shiny.rstudio.com/gallery/widget-gallery.html)
+
+
+## Shiny Code ecample
+
+
+```{r, echo=FALSE}
+library(shinyAce)
+  inputPanel(
+    div(
+      class = "form-group shiny-input-container", 
+      style = paste0("width: ", validateCssUnit("100%"), ";"), 
+      tags$label("R code to run", `for` = "r_code"),
+      tags$input(id = "r_code", type = "text", 
+class = "form-control", 
+value = 'hist(faithful$eruptions, 
+      probability = TRUE, 
+        breaks = 20,
+       xlab = "Duration (minutes)", 
+       main = "Geyser eruption duration")'))
+)
+    
+    #   textInput("r_code", label = "R code to run",
+    #             value = 'hist(faithful$eruptions, 
+    #       probability = TRUE, 
+    #         breaks = 20,
+    #        xlab = "Duration (minutes)", 
+    #        main = "Geyser eruption duration")', width = "100%")
+  # ),
+  renderPlot({
+    eval(parse(text = input$r_code))
+  })
+# )
+```
+
+
 
 
 ## Default Interactive Plot Input (UI) Code
@@ -107,7 +144,7 @@ renderTable({
 ```{r, echo = FALSE}
 renderDataTable({
   cars
-  })
+})
 ```
 
 ## DataTables in Shiny
@@ -115,7 +152,6 @@ renderDataTable({
 ```{r, echo = TRUE, eval = FALSE}
 renderDataTable({
   cars
-  })
+})
 ```
-
 
